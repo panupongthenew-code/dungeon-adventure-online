@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#070b18"><title>Dungeon Monopoly Mobile</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#070b18;color:#fff;font-family:system-ui,-apple-system,sans-serif}button{font:inherit}.screen{min-height:100svh;padding:18px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 20%,#26306b,#070b18 65%)}.card{width:min(600px,100%);background:#0e1530ee;border:1px solid #ffffff20;border-radius:28px;padding:24px;box-shadow:0 20px 70px #0009}h1{font-size:48px;line-height:.9;margin:12px 0 16px;font-weight:900}h1 span{color:#a78bfa}p{color:#aab4cf}.modes{display:grid;gap:12px}.m{border:1px solid #ffffff18;background:#ffffff09;color:#fff;border-radius:18px;padding:17px;text-align:left}.m b{display:block;font-size:19px}.m small{color:#94a3b8}.jobgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.job{padding:13px;border:1px solid #ffffff15;background:#ffffff08;color:#fff;border-radius:15px;text-align:left}.job.sel{border-color:#a78bfa;background:#7c3aed22}.job .icon{font-size:30px}.job small{display:block;color:#aab4cf}.game{min-height:100svh;background:radial-gradient(circle at 50% 10%,#18204a,#070b18 60%)}header{height:58px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.brand{font-weight:900}.brand i{color:#a78bfa;font-style:normal}.players{display:flex;gap:7px;padding:9px;overflow:auto}.p{min-width:132px;background:#ffffff08;border:1px solid #ffffff12;border-radius:12px;padding:8px}.p.active{border-color:#a78bfa;box-shadow:0 0 18px #8b5cf633}.phead{display:flex;align-items:center;gap:7px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:20px}.cash{font-weight:800;font-size:13px}.tiny{font-size:10px;color:#94a3b8}.ability{color:#c4b5fd;font-size:10px}.wrap{padding:7px;display:flex;justify-content:center}.board{width:min(96vw,600px);aspect-ratio:1;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:3px;background:#161d39;padding:4px;border-radius:18px;position:relative;box-shadow:0 20px 60px #0008}.t{background:#f8fafc;color:#111827;border-radius:5px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(7px,1.8vw,11px);font-weight:700;padding:3px}.t .c{position:absolute;top:0;left:0;right:0;height:5px}.tok{position:absolute;bottom:1px;display:flex;gap:1px}.dot{width:17px;height:17px;border-radius:50%;border:2px solid #fff;font-size:9px;display:grid;place-items:center;color:#111;box-shadow:0 2px 5px #0007}.center{grid-column:2/7;grid-row:2/7;background:radial-gradient(circle,#19234b,#0b1025);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center}.center .logo{font-size:clamp(24px,8vw,48px);font-weight:900;color:#c4b5fd}.dice{font-size:54px;margin:10px;perspective:500px;transition:.1s}.dice.rolling{animation:diceRoll .7s ease-in-out infinite}.dice-face{display:inline-block;filter:drop-shadow(0 7px 8px #0008)}@keyframes diceRoll{0%{transform:rotateX(0) rotateY(0) rotateZ(0) scale(1)}25%{transform:rotateX(130deg) rotateY(90deg) rotateZ(30deg) scale(1.12)}50%{transform:rotateX(250deg) rotateY(190deg) rotateZ(80deg) scale(.92)}75%{transform:rotateX(340deg) rotateY(280deg) rotateZ(140deg) scale(1.12)}100%{transform:rotateX(360deg) rotateY(360deg) rotateZ(180deg) scale(1)}}.roll{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:0;border-radius:14px;padding:12px 25px;font-weight:800}.roll:disabled{opacity:.4}.bottom{position:sticky;bottom:0;padding:10px;background:#070b18ee;border-top:1px solid #ffffff12}.msg{text-align:center;color:#c4b5fd;font-size:13px;margin-bottom:7px}.actions{display:flex;gap:8px}.actions button{flex:1;border:0;border-radius:12px;padding:11px;background:#ffffff10;color:#fff}.actions .primary{background:#7c3aed}.modal{position:fixed;inset:0;background:#020617cc;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}.modalbox{width:min(430px,100%);background:#10172c;border:1px solid #ffffff1c;border-radius:24px;padding:25px}.modalbox button{width:100%;margin-top:10px;padding:12px;border:0;border-radius:12px;background:#7c3aed;color:#fff;font-weight:800}.skill{padding:12px;border-radius:13px;background:#ffffff08;margin-top:10px;color:#cbd5e1}.bar{height:6px;background:#ffffff12;border-radius:9px;margin-top:7px;overflow:hidden}.bar i{display:block;height:100%;background:#a78bfa}
+</style></head><body><div id="app"></div>
+<script>
+const colors=['#f43f5e','#38bdf8','#4ade80','#facc15'];
+const jobs=[
+ {name:'Swordsman',icon:'⚔️',desc:'พลังชีวิต +35 และโจมตีมอนสเตอร์แรงขึ้น',hp:35,atk:12},
+ {name:'Mage',icon:'🧙',desc:'เวทมนตร์สร้างความเสียหายสูงและมีโอกาสคริติคอล',atk:18,crit:.25},
+ {name:'Archer',icon:'🏹',desc:'โจมตีระยะไกล ได้เปรียบในการต่อสู้',atk:15,crit:.18},
+ {name:'Acolyte',icon:'✨',desc:'ฟื้น HP หลังการต่อสู้',heal:18,atk:9},
+ {name:'Merchant',icon:'💰',desc:'ซื้อของในร้านดันเจี้ยนถูกลง 20%',buy:.8,atk:8},
+ {name:'Thief',icon:'🗡️',desc:'มีโอกาสหลบการโจมตีและขโมยเงินจากมอนสเตอร์',dodge:.22,atk:13}
+];
+const tiles=[
+['ค่ายนักผจญภัย','camp'],['ป่าก็อบลิน','m',90,'#4ade80'],['หีบสมบัติ','chest'],['ถ้ำหมาป่า','m',120,'#94a3b8'],
+['กับดักพิษ','trap'],['ซากปรักหักพัง','m',150,'#a78bfa'],['ร้านค้า','shop'],['สุสาน','m',180,'#64748b'],
+['แท่นฟื้นพลัง','heal'],['ถ้ำแมงมุม','m',210,'#f472b6'],['ดวงชะตา','card'],['ป้อมออร์ค','m',240,'#ef4444'],
+['ประตูดันเจี้ยน','gate'],['เหมืองใต้ดิน','m',270,'#f59e0b'],['หีบสมบัติ','chest'],['วิหารร้าง','m',300,'#a78bfa'],
+['บ่อน้ำศักดิ์สิทธิ์','heal'],['ป่ามายา','m',330,'#22c55e'],['ดวงชะตา','card'],['ถ้ำมังกร','m',380,'#dc2626'],
+['ร้านค้า','shop'],['ห้องบอส','boss',500,'#7f1d1d'],['กับดักไฟ','trap'],['ห้องอสูร','m',430,'#9333ea'],
+['หีบสมบัติ','chest'],['หอคอยเวทมนตร์','m',470,'#2563eb'],['จุดพัก','camp'],['ประตูชัย','goal']
+];
+const monsters=[
+ ['Goblin','👺',45,12,50],['Wolf','🐺',55,14,65],['Skeleton','💀',70,16,80],
+ ['Orc','👹',90,20,110],['Spider','🕷️',75,18,95],['Demon','😈',120,24,150],
+ ['Dragon','🐉',190,32,300]
+];
+let mode=null,players=[],current=0,msg='เริ่มเกม!',roll=[1,1,1],rolling=false,modal=null;
+const $=s=>document.querySelector(s);
+function setup(){document.getElementById('app').innerHTML=`<div class="screen"><div class="card"><div class="tiny">⚔️ DUNGEON BOARD RPG</div><h1>DUNGEON<br><span>ADVENTURE</span></h1><p>เลือกโหมดและอาชีพนักผจญภัย</p><div class="modes"><button class="m" onclick="choose('bot')"><b>🤖 เล่นกับ AI</b><small>เล่นคนเดียวกับบอท</small></button><button class="m" onclick="choose('local')"><b>👥 เล่นในเครื่อง</b><small>ผลัดกันเล่น 2–4 คน</small></button><button class="m" onclick="onlineScreen()"><b>🌐 เล่นออนไลน์</b><small>สร้าง/เข้าห้อง</small></button></div></div></div>`}
+function choose(m){mode=m;document.getElementById('app').innerHTML=`<div class="screen"><div class="card"><h2>เลือกอาชีพ 👤</h2><p>อาชีพจะติดตัวตลอดเกม</p><div class="jobgrid">${jobs.map((j,i)=>`<button class="job ${i===0?'sel':''}" onclick="selectJob(${i})"><span class="icon">${j.icon}</span><b>${j.name}</b><small>${j.desc}</small></button>`).join('')}</div><button class="m" style="width:100%;text-align:center;background:#7c3aed" onclick="start()">เริ่มเกม</button></div></div>`;window.selectedJob=0}
+function selectJob(i){window.selectedJob=i;document.querySelectorAll('.job').forEach((x,n)=>x.classList.toggle('sel',n===i))}
+function start(){
+ let n=mode==='bot'?3:4;
+ players=Array.from({length:n},(_,i)=>({
+  name:i===0?'คุณ':['นีออน','โคเม็ต','ไททัน'][i-1],
+  cash:500,hp:100,maxhp:100,pos:0,level:1,exp:0,props:[],
+  bot:mode==='bot'&&i>0,job:i===0?window.selectedJob:i%jobs.length
+ }));
+ let j=jobs[players[0].job];players[0].maxhp+=j.hp;players[0].hp=players[0].maxhp;
+ current=0;msg='ออกเดินทางจากค่ายนักผจญภัย!';draw()
+}
+function gridPos(i){if(i<=6)return[7,i+1];if(i<=12)return[13-i,7];if(i<=18)return[1,19-i];return[i-19+1,1]}
+function draw(){
+ let h='<div class="game"><header><div class="brand">⚔️ DUNGEON <i>ADVENTURE</i></div><button onclick="setup()" style="background:#ffffff10;color:#fff;border:1px solid #ffffff18;border-radius:9px;padding:7px">ออก</button></header><div class="players">';
+ players.forEach((p,i)=>{let j=jobs[p.job];h+=`<div class="p ${i===current?'active':''}"><div class="phead"><div class="avatar" style="background:${colors[i]}">${j.icon}</div><div><b>${p.name}</b><div class="tiny">${j.name} Lv.${p.level}</div></div></div><div class="cash">💰 ฿${p.cash}</div><div class="ability">❤️ ${p.hp}/${p.maxhp} • EXP ${p.exp}/100</div></div>`});
+ h+='</div><div class="wrap"><div class="board">';
+ tiles.forEach((t,i)=>{let [r,c]=gridPos(i),tok=players.filter(p=>p.pos===i).map(p=>`<span class="dot" style="background:${colors[players.indexOf(p)]}">${jobs[p.job].icon}</span>`).join('');h+=`<div class="t" style="grid-row:${r};grid-column:${c}">${t[3]?`<span class="c" style="background:${t[3]}"></span>`:''}<span>${t[0]}</span><div class="tok">${tok}</div></div>`});
+ h+=`<div class="center"><div class="logo">DUNGEON</div><div class="tiny">MONSTER ADVENTURE</div><div class="dice ${rolling?'rolling':''}"><span class="dice-face">🎲</span></div><button class="roll" onclick="doRoll()" ${rolling||players[current].bot?'disabled':''}>${rolling?'กำลังทอย...':'ทอยเต๋า'}</button></div></div></div><div class="bottom"><div class="msg">${msg} • ${roll.join(' + ')} = ${roll.reduce((a,b)=>a+b,0)}</div><div class="actions"><button onclick="showJob()">อาชีพ</button><button class="primary" onclick="doRoll()" ${rolling||players[current].bot?'disabled':''}>🎲 ทอยเต๋า</button></div></div></div>`;
+ document.getElementById('app').innerHTML=h;if(players[current].bot&&!rolling)setTimeout(doRoll,900)
+}
+function doRoll(){
+ if(rolling)return;rolling=true;draw();
+ setTimeout(()=>{
+  roll=[1,1,1].map(()=>1+Math.floor(Math.random()*6));let p=players[current],j=jobs[p.job],s=roll.reduce((a,b)=>a+b,0);p.pos=(p.pos+s)%28;
+  let t=tiles[p.pos];msg=p.name+' เดินเข้าสู่ '+t[0];
+  if(t[1]==='m'||t[1]==='boss'){fight(t);return}
+  if(t[1]==='chest'){let g=80+Math.floor(Math.random()*120);p.cash+=g;msg='เปิดหีบ! ได้ 💰 '+g}
+  if(t[1]==='trap'){p.hp=Math.max(1,p.hp-20);msg='💥 กับดัก! HP -20'}
+  if(t[1]==='heal'){p.hp=Math.min(p.maxhp,p.hp+35);msg='✨ ฟื้นพลัง HP +35'}
+  if(t[1]==='shop'){modal={type:'shop'};rolling=false;draw();showModal();return}
+  if(t[1]==='card'){modal={type:'card'};rolling=false;draw();showModal();return}
+  if(t[1]==='camp'){p.hp=p.maxhp;msg='🏕️ พักที่ค่าย ฟื้น HP เต็ม'}
+  if(t[1]==='goal'){msg='🏆 คุณพบประตูชัย! รับรางวัล 300';p.cash+=300}
+  rolling=false;draw();next()
+ },800)
+}
+function fight(tile){
+ let p=players[current],j=jobs[p.job],m=tile[1]==='boss'?monsters[6]:monsters[Math.floor(Math.random()*(monsters.length-1))];
+ let atk=j.atk+(p.level*3),crit=Math.random()<(j.crit||0),dmg=atk*(crit?2:1)+Math.floor(Math.random()*10);
+ let enemy=m[2],enemyAtk=m[3];enemy-=dmg;
+ if(enemy<=0){
+  let reward=m[4]+Math.floor(Math.random()*50);p.cash+=reward;p.exp+=35+(m[2]>100?25:0);if(j.heal)p.hp=Math.min(p.maxhp,p.hp+j.heal);
+  if(p.exp>=100){p.level++;p.exp-=100;p.maxhp+=10;p.hp=p.maxhp}
+  msg=`⚔️ ${m[1]} ${m[0]} ถูกกำจัด! ${crit?'คริติคอล! ':''}รับ 💰${reward}`;
+ }else{
+  let incoming=Math.max(1,enemyAtk-Math.floor(p.level*2));if(j.dodge&&Math.random()<j.dodge)incoming=0;
+  p.hp-=incoming;msg=`⚔️ สู้กับ ${m[1]} ${m[0]} สร้าง ${dmg} ดาเมจ • คุณเสีย HP ${incoming}`;
+  if(p.hp<=0){p.hp=1;p.cash=Math.max(0,p.cash-80);p.pos=0;msg+=' • พ่ายแพ้! กลับค่าย'}
+ }
+ rolling=false;draw();setTimeout(next,700)
+}
+function next(){current=(current+1)%players.length;draw()}
+function showModal(){
+ let p=players[current],j=jobs[p.job],body='';
+ if(modal.type==='shop')body=`<h2>🛒 ร้านค้า</h2><p>โพชั่นฟื้น HP +30 ราคา ฿50</p><button onclick="buyPotion()">ซื้อโพชั่น</button><button onclick="closeM()" style="background:#ffffff12">ข้าม</button>`;
+ else body=`<h2>🔮 ดวงชะตา</h2><p>พลังโบราณกำลังตัดสินชะตาคุณ</p><button onclick="card()">เปิดการ์ด</button>`;
+ let e=document.createElement('div');e.className='modal';e.id='modal';e.innerHTML='<div class="modalbox">'+body+'</div>';document.body.appendChild(e)
+}
+function buyPotion(){let p=players[current],j=jobs[p.job],price=Math.floor(50*(j.buy||1));if(p.cash>=price){p.cash-=price;p.hp=Math.min(p.maxhp,p.hp+30);msg='🧪 ใช้โพชั่น ฟื้น HP +30'}closeM()}
+function card(){let p=players[current],g=Math.random()<.5?180:-70;p.cash+=g;msg=g>0?'🔮 พลังโชคมอบเงิน '+g:'💀 คำสาป! เสียเงิน 70';closeM()}
+function closeM(){document.getElementById('modal')?.remove();modal=null;draw();next()}
+function showJob(){let p=players[current],j=jobs[p.job];let e=document.createElement('div');e.className='modal';e.id='modal';e.innerHTML=`<div class="modalbox"><h2>${j.icon} ${j.name}</h2><p>${j.desc}</p><div class="skill"><b>ความสามารถพิเศษ</b><p>ATK +${j.atk} ${j.hp?`• HP +${j.hp}`:''} ${j.crit?`• Crit ${j.crit*100}%`:''} ${j.dodge?`• หลบ ${j.dodge*100}%`:''}</p></div><button onclick="document.getElementById('modal').remove()">ปิด</button></div>`;document.body.appendChild(e)}
+
+function onlineScreen(){
+ document.getElementById('app').innerHTML=`<div class="screen"><div class="card"><h2>🌐 เล่นออนไลน์</h2>
+ <input id="oname" placeholder="ชื่อผู้เล่น" style="width:100%;padding:12px;border-radius:10px;margin:6px 0;background:#ffffff10;color:#fff;border:1px solid #ffffff20">
+ <input id="rcode" placeholder="Room Code (ถ้าเข้าห้อง)" style="width:100%;padding:12px;border-radius:10px;margin:6px 0;background:#ffffff10;color:#fff;border:1px solid #ffffff20">
+ <button class="m" style="width:100%" onclick="connectOnline()">สร้าง/เข้าห้อง</button>
+ <button class="m" style="width:100%;margin-top:8px" onclick="setup()">กลับ</button></div></div>`
+}
+function connectOnline(){
+ const name=document.getElementById('oname').value||'Player',code=document.getElementById('rcode').value.trim();
+ const url=(location.protocol==='https:'?'wss://':'ws://')+location.host;
+ window.onlineWS=new WebSocket(url);
+ onlineWS.onopen=()=>onlineWS.send(JSON.stringify(code?{type:'join',code,name,job:window.selectedJob||0}:{type:'create',name,job:window.selectedJob||0}));
+ onlineWS.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='hello')window.myId=m.id;
+  if(m.type==='room'){msg='Room: '+m.code;alert('Room Code: '+m.code+'\nส่งรหัสนี้ให้เพื่อนเข้าห้องได้เลย');}
+  if(m.type==='state'){window.onlineState=m;mode='online';onlineDraw(m)}
+  if(m.type==='victory'){alert('🏆 '+m.winnerName+' ชนะในรอบที่ '+m.round+'!');setup()}
+  if(m.type==='error')alert(m.message)
+ };
+ onlineWS.onclose=()=>alert('การเชื่อมต่อออนไลน์หลุด');
+}
+function onlineDraw(s){
+ let me=s.players.find(p=>p.id===window.myId), h='<div class="game"><header><div class="brand">🌐 DUNGEON <i>ONLINE</i></div><div>รอบ '+s.round+'/5</div></header><div class="players">';
+ s.players.forEach((p,i)=>h+=`<div class="p ${i===s.current?'active':''}"><div class="phead"><div class="avatar">${jobs[p.job].icon}</div><div><b>${p.name}</b><div class="tiny">${jobs[p.job].name} Lv.${p.level}</div></div></div><div class="cash">💰 ฿${p.cash}</div><div class="ability">❤️ ${p.hp}/${p.maxhp}</div></div>`);
+ h+='</div><div class="wrap"><div class="board">';
+ tiles.forEach((t,i)=>{let [r,c]=gridPos(i),tok=s.players.filter(p=>p.pos===i).map(p=>`<span class="dot" style="background:${colors[s.players.indexOf(p)]}">${jobs[p.job].icon}</span>`).join('');h+=`<div class="t" style="grid-row:${r};grid-column:${c}"><span>${t[0]}</span><div class="tok">${tok}</div></div>`});
+ h+=`<div class="center"><div class="logo">DUNGEON</div><div class="tiny">ONLINE • ${s.room}</div><div class="dice">🎲</div><button class="roll" onclick="onlineRoll()" ${s.players[s.current]?.id!==window.myId?'disabled':''}>${s.players[s.current]?.id===window.myId?'ทอยเต๋า':'รอ '+(s.players[s.current]?.name||'ผู้เล่น')}</button></div></div></div><div class="bottom"><div class="msg">รอบ ${s.round}/5 • เกมจบอัตโนมัติเมื่อครบ 5 รอบ</div><div class="actions"><button onclick="setup()">ออก</button>${s.hostId===window.myId&&!s.started?`<button onclick="onlineStart()">▶️ เริ่ม</button>`:""}<button class="primary" onclick="onlineRoll()" ${s.players[s.current]?.id!==window.myId?'disabled':''}>🎲 ทอยเต๋า</button></div></div></div>`;
+ document.getElementById('app').innerHTML=h
+}
+function onlineStart(){if(window.onlineWS?.readyState===1)onlineWS.send(JSON.stringify({type:'start'}))}
+function onlineRoll(){if(window.onlineWS?.readyState===1)onlineWS.send(JSON.stringify({type:'roll'}))}
+
+setup();
+</script></body></html>
